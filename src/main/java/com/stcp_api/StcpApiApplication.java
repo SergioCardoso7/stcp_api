@@ -1,4 +1,4 @@
-package com.stcp_api.stcp_api;
+package com.stcp_api;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -7,6 +7,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class StcpApiApplication {
 
 	public static void main(String[] args) {
+
+
+
 		SpringApplication.run(StcpApiApplication.class, args);
 	}
 
