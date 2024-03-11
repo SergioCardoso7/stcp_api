@@ -1,4 +1,4 @@
-package com.stcp_api.models;
+package com.stcp_api.models.domain;
 
 import jakarta.persistence.*;
 
