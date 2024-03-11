@@ -17,18 +17,22 @@ public class BusStopController {
 
     @GetMapping("/scrape")
     public String scraperTest(@RequestParam String url) {
+
         try {
+
             Document doc = Jsoup.connect(url).get();
 
             System.out.println(doc.toString());
 
             return doc.html();
 
-        } catch (IOException e) {
 
+        }catch (IOException e){
             e.printStackTrace();
-            return "Did not work";
+            return null;
         }
+
+
 
     }
 

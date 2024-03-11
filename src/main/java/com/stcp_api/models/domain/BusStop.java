@@ -1,4 +1,4 @@
-package com.stcp_api.models;
+package com.stcp_api.models.domain;
 
 import jakarta.persistence.*;
 
@@ -16,7 +16,7 @@ public class BusStop {
     private String name;
     private String zone;
 
-    @Embedded
+    @Transient
     private Point2D location;
     @ManyToMany
     private List<BusLine> lines;
