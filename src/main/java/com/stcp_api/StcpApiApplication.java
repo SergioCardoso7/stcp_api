@@ -1,6 +1,6 @@
 package com.stcp_api;
 
-import com.stcp_api.models.services.SetUpTrustStoreService;
+import com.stcp_api.domain.services.SetUpTrustStoreService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

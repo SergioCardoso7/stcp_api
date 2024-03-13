@@ -1,4 +1,4 @@
-package com.stcp_api.models.services;
+package com.stcp_api.domain.services;
 
 import javax.net.ssl.*;
 import java.io.FileInputStream;
@@ -37,7 +37,7 @@ public class SetUpTrustStoreService {
             trustStore.load(null, TRUSTSTORE_PASSWORD.toCharArray());
         }
 
-        Certificate[] certificates = getWebsiteCertificates(url); // Change URL to your target website
+        Certificate[] certificates = getWebsiteCertificates(url);
 
         if (certificates != null) {
             for (int i = 0; i < certificates.length; i++) {

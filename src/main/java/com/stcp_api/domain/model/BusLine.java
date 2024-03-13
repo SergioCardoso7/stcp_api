@@ -1,4 +1,4 @@
-package com.stcp_api.models.domain;
+package com.stcp_api.domain.model;
 
 import jakarta.persistence.*;
 
@@ -11,7 +11,7 @@ public class BusLine {
     @SequenceGenerator(name = "bus_line_sequence", sequenceName = "bus_line_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int id;
-    private Integer lineNumber;
+    private String lineCode;
     @Embedded
     private LineDirection lineDirection;
 
@@ -26,19 +26,18 @@ public class BusLine {
     protected BusLine() {
     }
 
-    public BusLine(Integer lineNumber, LineDirection lineDirection, List<BusStop> busStops) {
-        this.lineNumber = lineNumber;
+    public BusLine(String lineCode, LineDirection lineDirection, List<BusStop> busStops) {
+        this.lineCode = lineCode;
         this.lineDirection = lineDirection;
         this.busStops = busStops;
     }
 
-    public BusLine(int id, Integer lineNumber, LineDirection lineDirection, List<BusStop> busStops) {
+    public BusLine(int id, String lineCode, LineDirection lineDirection, List<BusStop> busStops) {
         this.id = id;
-        this.lineNumber = lineNumber;
+        this.lineCode = lineCode;
         this.lineDirection = lineDirection;
         this.busStops = busStops;
     }
-
 
     public int getId() {
         return id;
@@ -48,21 +47,22 @@ public class BusLine {
         this.id = id;
     }
 
-    public Integer getLineNumber() {
-        return lineNumber;
+    public String getLineCode() {
+        return lineCode;
     }
 
-    public void setLineNumber(Integer lineNumber) {
-        this.lineNumber = lineNumber;
+    public void setLineCode(String lineCode) {
+        this.lineCode = lineCode;
     }
 
-    public LineDirection getLineDirections() {
+    public LineDirection getLineDirection() {
         return lineDirection;
     }
 
-    public void setLineDirections(LineDirection lineDirections) {
-        this.lineDirection = lineDirections;
+    public void setLineDirection(LineDirection lineDirection) {
+        this.lineDirection = lineDirection;
     }
+
 
     public List<BusStop> getBusStops() {
         return busStops;
@@ -70,5 +70,13 @@ public class BusLine {
 
     public void setBusStops(List<BusStop> busStops) {
         this.busStops = busStops;
+    }
+
+    @Override
+    public String toString() {
+        return "BusLine{" +
+                "lineCode='" + lineCode + '\'' +
+                ", lineDirection=" + lineDirection +
+                '}';
     }
 }
