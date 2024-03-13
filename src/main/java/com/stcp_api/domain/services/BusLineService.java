@@ -20,9 +20,9 @@ public class BusLineService {
 
     private static final String ALL_BUS_LINES_ENDPOINT = "https://www.stcp.pt/pt/itinerarium/callservice.php?action=lineslist";
 
-   // {"accessibility": 1, "code": "200", "pubcode": "200", "description": "200 - BOLHÃO-CAST. QUEIJO"}
+    // {"accessibility": 1, "code": "200", "pubcode": "200", "description": "200 - BOLHÃO-CAST. QUEIJO"}
 
-    public List<BusLine> getAllBusLines(){
+    public List<BusLine> getAllBusLines() {
 
         List<BusLine> allBuslines = new ArrayList<>();
 
@@ -36,43 +36,40 @@ public class BusLineService {
 
             JsonArray records = jsonObject.getAsJsonArray("records");
 
-            for(JsonElement record : records.asList()){
+            for (JsonElement record : records.asList()) {
 
                 JsonObject innerJsonObject = record.getAsJsonObject();
-                String lineCode = innerJsonObject.get("code").getAsString();
+                String lineCode = innerJsonObject.get("pubcode").getAsString();
                 String description = innerJsonObject.get("description").getAsString();
 
                 String[] descriptionParts = description.split("-");
                 String startStop = descriptionParts[1].trim();
                 String endStop = descriptionParts[2].trim();
 
-                LineDirection directionOne = new LineDirection(0,endStop);
-                LineDirection directionTwo = new LineDirection(1,startStop);
+                LineDirection directionOne = new LineDirection(0, endStop);
+                LineDirection directionTwo = new LineDirection(1, startStop);
 
                 List<BusStop> busStopsOfLine = getLineBusStops(lineCode);
 
-                BusLine busLineOne = new BusLine(lineCode, directionOne, busStopsOfLine);
-                BusLine busLineTwo = new BusLine(lineCode, directionTwo, busStopsOfLine);
+                BusLine busLineDTO = new BusLine(lineCode, directionOne, directionTwo, busStopsOfLine);
 
-                allBuslines.add(busLineOne);
-                allBuslines.add(busLineTwo);
+                allBuslines.add(busLineDTO);
+
             }
 
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
         return allBuslines;
     }
 
-    public List<BusStop> getLineBusStops(String lineCode){
+    public List<BusStop> getLineBusStops(String lineCode) {
         List<BusStop> busStops = new ArrayList<>();
-
 
 
         return busStops;
     }
-
 
 
 }
