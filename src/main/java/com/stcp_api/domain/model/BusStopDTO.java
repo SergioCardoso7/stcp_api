@@ -3,20 +3,18 @@ package com.stcp_api.domain.model;
 import java.awt.geom.Point2D;
 import java.util.List;
 
-
-public class BusStop {
+public class BusStopDTO {
     private String code;
     private String name;
     private String zone;
-    private Point2D location;
-    private List<ArrivingBus> arrivingBuses;
+    private Point2D.Double location;
 
-    public BusStop(String code, String name, String zone, Point2D location, List<ArrivingBus> arrivingBuses) {
+
+    public BusStopDTO(String code, String name, String zone, Point2D.Double location) {
         this.code = code;
         this.name = name;
         this.zone = zone;
         this.location = location;
-        this.arrivingBuses = arrivingBuses;
     }
 
     public String getCode() {
@@ -43,19 +41,11 @@ public class BusStop {
         this.zone = zone;
     }
 
-    public Point2D getLocation() {
+    public Point2D.Double getLocation() {
         return location;
     }
 
-    public void setLocation(Point2D location) {
+    public void setLocation(Point2D.Double location) {
         this.location = location;
-    }
-
-    public List<ArrivingBus> getIncomingBuses() {
-        return arrivingBuses;
-    }
-
-    public void setIncomingBuses(List<ArrivingBus> arrivingBuses) {
-        this.arrivingBuses = arrivingBuses;
     }
 }

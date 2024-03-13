@@ -1,38 +1,16 @@
 package com.stcp_api.domain.model;
 
-import jakarta.persistence.*;
-
 import java.time.LocalTime;
 
-@Entity
-public class IncomingBus {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
-
-    @OneToOne
+public class ArrivingBus {
     private BusLine busLine;
-
-    @OneToOne
     private BusStop busStop;
     private LocalTime estimatedTimeOfArrival;
 
     private LocalTime waitingTime;
 
-    protected IncomingBus() {
 
-    }
-
-    public IncomingBus(BusLine busLine, BusStop busStop, LocalTime estimatedTimeOfArrival, LocalTime waitingTime) {
-        this.busLine = busLine;
-        this.busStop = busStop;
-        this.estimatedTimeOfArrival = estimatedTimeOfArrival;
-        this.waitingTime = waitingTime;
-    }
-
-    public IncomingBus(int id, BusLine busLine, BusStop busStop, LocalTime estimatedTimeOfArrival, LocalTime waitingTime) {
-        this.id = id;
+    public ArrivingBus(BusLine busLine, BusStop busStop, LocalTime estimatedTimeOfArrival, LocalTime waitingTime) {
         this.busLine = busLine;
         this.busStop = busStop;
         this.estimatedTimeOfArrival = estimatedTimeOfArrival;

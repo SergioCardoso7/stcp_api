@@ -1,6 +1,5 @@
 package com.stcp_api.application;
 
-
 import com.stcp_api.domain.model.BusLine;
 import com.stcp_api.domain.services.BusLineService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,17 +26,4 @@ public class BusLineController {
         return busLineService.getAllBusLines();
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
