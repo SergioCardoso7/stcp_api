@@ -1,5 +1,9 @@
 package com.stcp_api.util;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -10,6 +14,8 @@ public class Utils {
 
     private static final String STOP_HASH_CODE_ENDPOINT_1 = "https://www.stcp.pt/pt/viajar/horarios/?paragem=";
     private static final String STOP_HASH_CODE_ENDPOINT_2 = "&t=smsbus";
+
+    private static final String ALL_BUS_LINES_ENDPOINT = "https://www.stcp.pt/pt/itinerarium/callservice.php?action=lineslist";
 
     public static String getStopHash(String stopCode) {
         String stopHashCode = null;
@@ -30,6 +36,32 @@ public class Utils {
             e.printStackTrace();
         }
         return stopHashCode;
+    }
+
+    public static String getBusLineInternalCode(String busLineCode) {
+
+        try {
+            Document doc = Jsoup.connect(ALL_BUS_LINES_ENDPOINT).get();
+
+            String jsonString = doc.body().text();
+
+            JsonObject jsonObject = JsonParser.parseString(jsonString).getAsJsonObject();
+            JsonArray records = jsonObject.getAsJsonArray("records");
+
+            for (JsonElement record : records.asList()) {
+
+                JsonObject innerJsonObject = record.getAsJsonObject();
+                String lineCode = innerJsonObject.get("pubcode").getAsString();
+
+                if (lineCode.equalsIgnoreCase(busLineCode)) {
+                    return innerJsonObject.get("code").getAsString();
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
 

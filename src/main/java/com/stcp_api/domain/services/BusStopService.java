@@ -4,11 +4,9 @@ package com.stcp_api.domain.services;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.stcp_api.domain.model.BusStop;
 import com.stcp_api.domain.model.BusStopDTO;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.springframework.stereotype.Service;
 
 import java.awt.geom.Point2D;
@@ -71,6 +69,7 @@ public class BusStopService {
         }
 
     }
+    //should return a list of stops with that name
     /*
     public JsonObject getBusStopDataByName(String name) {
 
