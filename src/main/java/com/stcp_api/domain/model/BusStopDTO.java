@@ -1,7 +1,6 @@
 package com.stcp_api.domain.model;
 
 import java.awt.geom.Point2D;
-import java.util.List;
 
 public class BusStopDTO {
     private String code;

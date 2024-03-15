@@ -3,34 +3,39 @@ package com.stcp_api.domain.model;
 import java.time.LocalTime;
 
 public class ArrivingBus {
-    private BusLine busLine;
-    private BusStop busStop;
+    private String busLineCode;
+    private String endBusStopName;
     private LocalTime estimatedTimeOfArrival;
+    private String waitingTime;
 
-    private LocalTime waitingTime;
-
-
-    public ArrivingBus(BusLine busLine, BusStop busStop, LocalTime estimatedTimeOfArrival, LocalTime waitingTime) {
-        this.busLine = busLine;
-        this.busStop = busStop;
+    public ArrivingBus(String busLineCode, String endBusStopName, LocalTime estimatedTimeOfArrival, String waitingTime) {
+        this.busLineCode = busLineCode;
+        this.endBusStopName = endBusStopName;
         this.estimatedTimeOfArrival = estimatedTimeOfArrival;
         this.waitingTime = waitingTime;
     }
 
-    public BusLine getBusLine() {
-        return busLine;
+    public ArrivingBus(String busLineCode, String endBusStopName, String waitingTime) {
+        this.busLineCode = busLineCode;
+        this.endBusStopName = endBusStopName;
+        this.waitingTime = waitingTime;
     }
 
-    public void setBusLine(BusLine busLine) {
-        this.busLine = busLine;
+
+    public String getBusLineCode() {
+        return busLineCode;
     }
 
-    public BusStop getBusStop() {
-        return busStop;
+    public void setBusLineCode(String busLineCode) {
+        this.busLineCode = busLineCode;
     }
 
-    public void setBusStop(BusStop busStop) {
-        this.busStop = busStop;
+    public String getEndBusStopName() {
+        return endBusStopName;
+    }
+
+    public void setEndBusStopName(String endBusStopName) {
+        this.endBusStopName = endBusStopName;
     }
 
     public LocalTime getEstimatedTimeOfArrival() {
@@ -41,11 +46,11 @@ public class ArrivingBus {
         this.estimatedTimeOfArrival = estimatedTimeOfArrival;
     }
 
-    public LocalTime getWaitingTime() {
+    public String getWaitingTime() {
         return waitingTime;
     }
 
-    public void setWaitingTime(LocalTime waitingTime) {
+    public void setWaitingTime(String waitingTime) {
         this.waitingTime = waitingTime;
     }
 }
