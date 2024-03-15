@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.stcp_api.domain.exceptions.BusLineNotFoundException;
 import com.stcp_api.domain.model.BusLineDTO;
 import com.stcp_api.domain.model.BusStopDTO;
 import com.stcp_api.domain.model.LineDirection;
@@ -60,6 +61,9 @@ public class BusLineService {
         List<BusStopDTO> busStops = new ArrayList<>();
 
         try {
+
+            lineCode = getBusLineInternalCode(lineCode);
+
             Document doc = Jsoup.connect(BUS_LINE_STOPS_ENDPOINT_1 + lineCode + BUS_LINE_STOPS_ENDPOINT_2 + directionCode).get();
 
             String info = doc.body().text();
@@ -75,8 +79,11 @@ public class BusLineService {
                 busStops.add(busStopDTO);
 
             }
-
+            //TODO: Create custom handling for different exceptions, use logging
         } catch (IOException e) {
+            e.printStackTrace();
+
+        } catch (BusLineNotFoundException e) {
             e.printStackTrace();
         }
 
@@ -109,6 +116,40 @@ public class BusLineService {
         BusLineDTO busLineDTO = new BusLineDTO(lineCode, directionOne, directionTwo);
         return busLineDTO;
     }
+
+    public String getBusLineInternalCode(String busLineCode) throws BusLineNotFoundException {
+
+        try {
+            Document doc = Jsoup.connect(ALL_BUS_LINES_ENDPOINT).get();
+
+            String jsonString = doc.body().text();
+
+            JsonObject jsonObject = JsonParser.parseString(jsonString).getAsJsonObject();
+            JsonArray records = jsonObject.getAsJsonArray("records");
+
+            for (JsonElement record : records.asList()) {
+
+                JsonObject innerJsonObject = record.getAsJsonObject();
+                String lineCode = innerJsonObject.get("pubcode").getAsString();
+
+                if (lineCode.equalsIgnoreCase(busLineCode)) {
+                    return innerJsonObject.get("code").getAsString().trim();
+                }
+            }
+
+            throw new BusLineNotFoundException("Bus line: " + busLineCode + " not found");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+
+
+
+
     /*
 
     {"sort": null, "recordsReturned": 15, "totalRecords": 15, "records": [
