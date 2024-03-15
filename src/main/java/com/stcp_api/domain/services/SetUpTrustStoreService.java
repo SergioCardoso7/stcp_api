@@ -1,6 +1,7 @@
 package com.stcp_api.domain.services;
 
 import javax.net.ssl.*;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -30,6 +31,8 @@ public class SetUpTrustStoreService {
     private void initializeCustomTrustStore(String url) throws Exception {
 
         KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
+
+        File truststoreFile = new File(TRUSTSTORE_FILE);
 
         try (FileInputStream in = new FileInputStream(TRUSTSTORE_FILE)) {
             trustStore.load(in, TRUSTSTORE_PASSWORD.toCharArray());

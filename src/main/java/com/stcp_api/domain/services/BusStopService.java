@@ -4,6 +4,7 @@ package com.stcp_api.domain.services;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.stcp_api.domain.exceptions.BusStopNotFoundException;
 import com.stcp_api.domain.model.ArrivingBus;
 import com.stcp_api.domain.model.BusStopDTO;
 import org.jsoup.Jsoup;
@@ -46,15 +47,17 @@ public class BusStopService {
         "address": "ESTR.CIRCUNVALAÇÃO"}]
 
      */
-    public BusStopDTO getBusStopDataByBusCode(String busCode) {
+    public BusStopDTO getBusStopDataByBusCode(String busStop) {
 
         try {
 
-            Document doc = Jsoup.connect(BUS_STOP_DATA_ENDPOINT + busCode).get();
+            Document doc = Jsoup.connect(BUS_STOP_DATA_ENDPOINT + busStop).get();
 
             String info = doc.body().text();
 
             JsonArray jsonArray = JsonParser.parseString(info).getAsJsonArray();
+
+            if (jsonArray.isEmpty()) throw new BusStopNotFoundException(busStop);
 
             JsonObject jsonObject = jsonArray.get(0).getAsJsonObject();
 
@@ -71,11 +74,16 @@ public class BusStopService {
 
             return new BusStopDTO(busStopCode, busStopName, busStopZone, new Point2D.Double(longitude, latitude));
 
+        //TODO: More robust error handling
+
         } catch (IOException e) {
 
             e.printStackTrace();
             return null;
 
+        }catch (BusStopNotFoundException e){
+            e.printStackTrace();
+            return null;
         }
 
     }
