@@ -11,100 +11,65 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class BusStopService {
 
     private final String BUS_STOP_DATA_ENDPOINT = "https://www.stcp.pt/pt/itinerarium/callservice.php?action=srchstoplines&stopname=";
-
     private final String REAL_TIME_BUS_ENDPOINT = "https://www.stcp.pt/pt/widget/post.php?uid=";
     private final String REAL_TIME_BUS_ENDPOINT2 = "&paragem=";
     private final String UID = "d72242190a22274321cacf9eadc7ec5f";
+    private static final Logger logger = LoggerFactory.getLogger(BusStopService.class);
 
-    //[{"code": "PCT3", "name": "PICOUTOS", "zone": "MAI1", "lines": [{"accessibility": 2, "code": "506", "pubcode": "506", "dir": 1, "description": "HOSPITAL S.JOÃO"}], "geomdesc": "{\"type\":\"Point\",\"coordinates\":[-8.6233280838764,41.191419131449692]}", "mode": 1, "address": "R.5 OUTUBRO"}]
-    /*
-    [{"code": "IPO4", "name": "IPO (CIRCUNVAL.)", "zone": "PRT3",
-            "lines": [
-        {"accessibility": 1, "code": "205", "pubcode": "205", "dir": 1, "description": "CAMPANHÃ"},
-        {"accessibility": 1, "code": "300", "pubcode": "300", "dir": 0, "description": "CIRC.HOSPITAL DE S.JOÃO-ALIADOS"},
-        {"accessibility": 1, "code": "305", "pubcode": "305", "dir": 0, "description": "HOSPITAL DE S.JOÃO"},
-        {"accessibility": 2, "code": "505", "pubcode": "505", "dir": 1, "description": "HOSPITAL S. JOÃO"},
-        {"accessibility": 2, "code": "603", "pubcode": "603", "dir": 0, "description": "MAIA"},
-        {"accessibility": 1, "code": "704", "pubcode": "704", "dir": 0, "description": "CODICEIRA"},
-        {"accessibility": 2, "code": "705", "pubcode": "705", "dir": 1, "description": "HOSPITAL S. JOÃO"},
-        {"accessibility": 2, "code": "804", "pubcode": "804", "dir": 1, "description": "HOSPITAL S.JOÃO"},
-        {"accessibility": 2, "code": "9M", "pubcode": "9M", "dir": 0, "description": "GONDOMAR (VIA H. S. João)"},
-        {"accessibility": 2, "code": "11M", "pubcode": "11M", "dir": 1, "description": "HOSP. S. JOÃO"}],
-        "geomdesc": "{\"type\":\"Point\",\"coordinates\":[-8.604341550114464,41.183941881186499]}",
-        "mode": 1,
-        "address": "ESTR.CIRCUNVALAÇÃO"}]
 
-     */
-    public BusStopDTO getBusStopDataByBusCode(String busStop) {
+    public BusStopDTO getBusStopDataByBusCode(String busStop) throws BusStopNotFoundException, IOException {
 
-        try {
 
-            Document doc = Jsoup.connect(BUS_STOP_DATA_ENDPOINT + busStop).get();
+        Document doc = Jsoup.connect(BUS_STOP_DATA_ENDPOINT + busStop).get();
 
-            String info = doc.body().text();
+        String info = doc.body().text();
 
-            JsonArray jsonArray = JsonParser.parseString(info).getAsJsonArray();
+        JsonArray jsonArray = JsonParser.parseString(info).getAsJsonArray();
 
-            if (jsonArray.isEmpty()) throw new BusStopNotFoundException(busStop);
+        if (jsonArray.isEmpty()) throw new BusStopNotFoundException(busStop);
 
-            JsonObject jsonObject = jsonArray.get(0).getAsJsonObject();
+        JsonObject jsonObject = jsonArray.get(0).getAsJsonObject();
 
-            String busStopCode = jsonObject.get("code").getAsString();
-            String busStopName = jsonObject.get("name").getAsString();
-            String busStopZone = jsonObject.get("zone").getAsString();
+        String busStopCode = jsonObject.get("code").getAsString();
+        String busStopName = jsonObject.get("name").getAsString();
+        String busStopZone = jsonObject.get("zone").getAsString();
 
-            String geomdesc = jsonObject.get("geomdesc").getAsString();
+        String geomdesc = jsonObject.get("geomdesc").getAsString();
 
-            JsonObject geomdescObject = JsonParser.parseString(geomdesc).getAsJsonObject();
+        JsonObject geomdescObject = JsonParser.parseString(geomdesc).getAsJsonObject();
 
-            double longitude = geomdescObject.getAsJsonArray("coordinates").get(0).getAsDouble();
-            double latitude = geomdescObject.getAsJsonArray("coordinates").get(1).getAsDouble();
+        double longitude = geomdescObject.getAsJsonArray("coordinates").get(0).getAsDouble();
+        double latitude = geomdescObject.getAsJsonArray("coordinates").get(1).getAsDouble();
 
-            return new BusStopDTO(busStopCode, busStopName, busStopZone, new Point2D.Double(longitude, latitude));
+        return new BusStopDTO(busStopCode, busStopName, busStopZone, new Point2D.Double(longitude, latitude));
 
-        //TODO: More robust error handling
-
-        } catch (IOException e) {
-
-            e.printStackTrace();
-            return null;
-
-        }catch (BusStopNotFoundException e){
-            e.printStackTrace();
-            return null;
-        }
 
     }
 
-    public List<ArrivingBus> getIncomingBusses(String stopCode) {
+    public List<ArrivingBus> getIncomingBusses(String stopCode) throws IOException, BusStopNotFoundException {
 
-        try {
+        if(!busStopExists(stopCode)) throw new BusStopNotFoundException(stopCode);
 
-            Document doc = Jsoup.connect(REAL_TIME_BUS_ENDPOINT + UID + REAL_TIME_BUS_ENDPOINT2 + stopCode).get();
+        Document doc = Jsoup.connect(REAL_TIME_BUS_ENDPOINT + UID + REAL_TIME_BUS_ENDPOINT2 + stopCode).get();
 
-            return getArrivingBussesInfo(doc);
-
-        } catch (IOException e) {
-
-            e.printStackTrace();
-            return null;
-        }
+        return getIncomingBussesInfo(doc);
 
     }
 
-    public List<ArrivingBus> getArrivingBussesInfo(Document doc) {
+    public List<ArrivingBus> getIncomingBussesInfo(Document doc) {
 
         List<ArrivingBus> arrivingBuses = new ArrayList<>();
 
@@ -118,17 +83,17 @@ public class BusStopService {
             String endBusStopName = busElement.select(".floatLeft.Linha2").text().trim();
             String minutesAndTime = busElement.select(".floatLeft.Linha4").text().trim();
 
-            if(minutesAndTime.equalsIgnoreCase("a passar - ")){
+            if (!minutesAndTime.contains(":")) {
 
-                arrivingBuses.add(new ArrivingBus(busLineCode,endBusStopName,minutesAndTime));
+                arrivingBuses.add(new ArrivingBus(busLineCode, endBusStopName, minutesAndTime));
 
-            }else {
+            } else {
 
-                String[] timeAndMinutesParts = minutesAndTime.split("-");
+                String[] etaAndWaitingTimeParts = minutesAndTime.split("-");
 
-                String waitingTime = timeAndMinutesParts[1].trim();
+                String waitingTime = etaAndWaitingTimeParts[1].trim();
 
-                String[] hoursAndMinutes = timeAndMinutesParts[0].split(":");
+                String[] hoursAndMinutes = etaAndWaitingTimeParts[0].split(":");
 
                 int hours = Integer.parseInt(hoursAndMinutes[0].trim());
                 int minutes = Integer.parseInt(hoursAndMinutes[1].trim());
@@ -143,14 +108,15 @@ public class BusStopService {
         return arrivingBuses;
     }
 
-    //should return a list of stops with that name
-    /*
-    public JsonObject getBusStopDataByName(String name) {
+    public boolean busStopExists(String busStopCode) throws IOException {
 
+        Document doc = Jsoup.connect(BUS_STOP_DATA_ENDPOINT + busStopCode).get();
+
+        String info = doc.body().text();
+
+        JsonArray jsonArray = JsonParser.parseString(info).getAsJsonArray();
+
+        return !jsonArray.isEmpty();
 
     }
-
-     */
-
-
 }

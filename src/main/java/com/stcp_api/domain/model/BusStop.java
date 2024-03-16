@@ -8,14 +8,14 @@ public class BusStop {
     private String code;
     private String name;
     private String zone;
-    private Point2D location;
+    private Point2D coordinates;
     private List<ArrivingBus> arrivingBuses;
 
-    public BusStop(String code, String name, String zone, Point2D location, List<ArrivingBus> arrivingBuses) {
+    public BusStop(String code, String name, String zone, Point2D coordinates, List<ArrivingBus> arrivingBuses) {
         this.code = code;
         this.name = name;
         this.zone = zone;
-        this.location = location;
+        this.coordinates = coordinates;
         this.arrivingBuses = arrivingBuses;
     }
 
@@ -43,12 +43,12 @@ public class BusStop {
         this.zone = zone;
     }
 
-    public Point2D getLocation() {
-        return location;
+    public Point2D getCoordinates() {
+        return coordinates;
     }
 
-    public void setLocation(Point2D location) {
-        this.location = location;
+    public void setCoordinates(Point2D coordinates) {
+        this.coordinates = coordinates;
     }
 
     public List<ArrivingBus> getIncomingBuses() {
