@@ -3,7 +3,6 @@ package com.stcp_api.domain.model;
 import java.awt.geom.Point2D;
 import java.util.List;
 
-
 public class BusStop {
     private String code;
     private String name;

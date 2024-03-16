@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.stcp_api.domain.exceptions.BusLineNotFoundException;
 import com.stcp_api.domain.exceptions.BusStopNotFoundException;
+import com.stcp_api.domain.exceptions.InvalidLineDirectionException;
 import com.stcp_api.domain.model.BusLineDTO;
 import com.stcp_api.domain.model.BusStopDTO;
 import com.stcp_api.domain.model.LineDirection;
@@ -20,10 +21,18 @@ import java.util.List;
 @Service
 public class BusLineService {
 
+
     private static final String ALL_BUS_LINES_ENDPOINT = "https://www.stcp.pt/pt/itinerarium/callservice.php?action=lineslist";
     private static final String BUS_LINE_STOPS_ENDPOINT_1 = "https://www.stcp.pt/pt/itinerarium/callservice.php?action=linestops&lcode=";
     private static final String BUS_LINE_STOPS_ENDPOINT_2 = "&ldir=";
     BusStopService busStopService = new BusStopService();
+
+    /**
+     * This method returns all the bus lines
+     *
+     * @return a list with all the bus lines
+     * @throws IOException if there is an error in the connection
+     */
 
     public List<BusLineDTO> getAllBusLines() throws IOException {
 
@@ -48,8 +57,21 @@ public class BusLineService {
         return allBuslines;
     }
 
+    /**
+     * This method returns the bus stops of a specific line
+     *
+     * @param lineCode      the line code
+     * @param directionCode the direction code
+     * @return a list with the bus stops of the line
+     * @throws BusLineNotFoundException if the bus line does not exist
+     * @throws IOException              if there is an error in the connection
+     * @throws BusStopNotFoundException if the bus stop does not exist
+     */
 
-    public List<BusStopDTO> getLineBusStops(String lineCode, int directionCode) throws BusLineNotFoundException, IOException, BusStopNotFoundException {
+
+    public List<BusStopDTO> getLineBusStops(String lineCode, int directionCode) throws BusLineNotFoundException, BusStopNotFoundException, InvalidLineDirectionException, IOException {
+
+        if (directionCode < 0 || directionCode > 1) throw new InvalidLineDirectionException(String.valueOf(directionCode));
 
         List<BusStopDTO> busStops = new ArrayList<>();
 
@@ -99,6 +121,15 @@ public class BusLineService {
 
         return new BusLineDTO(lineCode, directionOne, directionTwo);
     }
+
+    /**
+     * This method returns the internal code of a bus line
+     *
+     * @param busLineCode the bus line code
+     * @return the internal code of the bus line
+     * @throws BusLineNotFoundException if the bus line does not exist
+     * @throws IOException              if there is an error in the connection
+     */
 
     public String getBusLineInternalCode(String busLineCode) throws BusLineNotFoundException, IOException {
 

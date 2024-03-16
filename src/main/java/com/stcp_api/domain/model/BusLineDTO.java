@@ -6,7 +6,6 @@ public class BusLineDTO {
     private LineDirection directionOne;
     private LineDirection directionTwo;
 
-
     public BusLineDTO(String lineCode, LineDirection directionOne, LineDirection directionTwo) {
         this.lineCode = lineCode;
         this.directionOne = directionOne;
