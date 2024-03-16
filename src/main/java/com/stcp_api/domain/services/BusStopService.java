@@ -1,6 +1,5 @@
 package com.stcp_api.domain.services;
 
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -11,14 +10,13 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.time.LocalTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class BusStopService {
@@ -27,8 +25,15 @@ public class BusStopService {
     private final String REAL_TIME_BUS_ENDPOINT = "https://www.stcp.pt/pt/widget/post.php?uid=";
     private final String REAL_TIME_BUS_ENDPOINT2 = "&paragem=";
     private final String UID = "d72242190a22274321cacf9eadc7ec5f";
-    private static final Logger logger = LoggerFactory.getLogger(BusStopService.class);
 
+    /**
+     * This method returns the bus stop data by the bus stop code
+     *
+     * @param busStop the bus stop code
+     * @return the bus stop data
+     * @throws BusStopNotFoundException if the bus stop does not exist
+     * @throws IOException              if there is an error in the connection
+     */
 
     public BusStopDTO getBusStopDataByBusCode(String busStop) throws BusStopNotFoundException, IOException {
 
@@ -58,6 +63,14 @@ public class BusStopService {
 
 
     }
+    /**
+     * This method returns the incoming busses to a bus stop
+     *
+     * @param stopCode the bus stop code
+     * @return the incoming busses to a bus stop
+     * @throws IOException              if there is an error in the connection
+     * @throws BusStopNotFoundException if the bus stop does not exist
+     */
 
     public List<ArrivingBus> getIncomingBusses(String stopCode) throws IOException, BusStopNotFoundException {
 

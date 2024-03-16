@@ -18,6 +18,7 @@ public class SetUpTrustStoreService {
     private static final String TRUSTSTORE_FILE = "stcp_truststore.jks";
     private static final String TRUSTSTORE_PASSWORD = "changeit";
 
+
     public SetUpTrustStoreService(String url) {
         try {
 
@@ -27,6 +28,13 @@ public class SetUpTrustStoreService {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Initializes the custom trust store
+     *
+     * @param url
+     * @throws Exception
+     */
 
     private void initializeCustomTrustStore(String url) throws Exception {
 
@@ -60,6 +68,12 @@ public class SetUpTrustStoreService {
         HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
     }
 
+    /**
+     * Get the certificates from the website
+     *
+     * @param url
+     * @return
+     */
 
     public Certificate[] getWebsiteCertificates(String url) {
 
