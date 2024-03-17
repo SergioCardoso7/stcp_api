@@ -1,13 +1,13 @@
-# stcp_api ![CI](https://github.com/SergioCardoso7/stcp_api/actions/workflows/maven.ymlbadge.svg)
+# stcp_api ![CI](https://github.com/SergioCardoso7/stcp_api/actions/workflows/maven.yml/badge.svg)
 A robust STCP (Sociedade de Transportes Colectivos do Porto) API.
 
 ## Description
 
 Since STCP does not provide a public API, this project aims to provide a robust (unofficial) API built in JAVA using the Spring Boot framework to access STCP data.
 
-This project aimed to be a simple demonstration of how to create a RESTful API using Spring Boot that is easy to understand and use.
+This project aimed to be a simple demonstration of how to create a RESTful API using Spring Boot that is easy to use and understand.
 
-**With this API, you can get the following data**: all the bus lines, all the bus stops of a specific line, information data about any bus stop and by the last and the most interesting feature, the next busses to arrive at a specific bus stop.
+**With this API, you can get the following data**: all the bus lines, all the bus stops of a specific line, information data about any bus stop and the most interesting feature: the next busses to arrive at a specific bus stop in real time.
 
 ## How to build and run the project
 
@@ -36,7 +36,7 @@ java -jar target\stcp_api-0.0.1-SNAPSHOT.jar
 #### How to:
 
 ```http
-localhost:8080/stcp_api/busline/getbuslines
+http://localhost:8080/stcp_api/busline/getbuslines
 ```
 #### Result:
 
@@ -514,12 +514,12 @@ http://localhost:8080/stcp_api/busstop/stopdata?stopCode=1AL2
 }
 ```
 
-### Get the next busses to arrive at a specific bus stop
+### Get the next busses to arrive at a specific bus stop in real time
 
 #### How to:
 
 ```http
-GET http://localhost:8080/stcp_api/busstop/stoprealtimes?stopCode={stopCode}
+http://localhost:8080/stcp_api/busstop/stoprealtimes?stopCode={stopCode}
 ```
 
 #### Example:
@@ -532,22 +532,22 @@ http://localhost:8080/stcp_api/busstop/stoprealtimes?stopCode=1AL2
 ```json 
 [
   {
+    "busLineCode": "200",
+    "endBusStopName": "BOLHÃO -",
+    "estimatedTimeOfArrival": "22:29:00",
+    "waitingTime": "4min"
+  },
+  {
     "busLineCode": "501",
     "endBusStopName": "TRINDADE - P",
-    "estimatedTimeOfArrival": null,
-    "waitingTime": "a passar -"
+    "estimatedTimeOfArrival": "22:48:00",
+    "waitingTime": "24min"
   },
   {
     "busLineCode": "200",
     "endBusStopName": "BOLHÃO -",
-    "estimatedTimeOfArrival": "22:27:00",
-    "waitingTime": "22min"
-  },
-  {
-    "busLineCode": "501",
-    "endBusStopName": "TRINDADE - P",
-    "estimatedTimeOfArrival": "22:47:00",
-    "waitingTime": "43min"
+    "estimatedTimeOfArrival": "23:12:00",
+    "waitingTime": "47min"
   }
 ]
 ```
