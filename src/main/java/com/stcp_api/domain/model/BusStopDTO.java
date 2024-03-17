@@ -6,14 +6,14 @@ public class BusStopDTO {
     private String code;
     private String name;
     private String zone;
-    private Point2D.Double location;
+    private Point2D.Double coordinates;
 
 
-    public BusStopDTO(String code, String name, String zone, Point2D.Double location) {
+    public BusStopDTO(String code, String name, String zone, Point2D.Double coordinates) {
         this.code = code;
         this.name = name;
         this.zone = zone;
-        this.location = location;
+        this.coordinates = coordinates;
     }
 
     public String getCode() {
@@ -40,11 +40,11 @@ public class BusStopDTO {
         this.zone = zone;
     }
 
-    public Point2D.Double getLocation() {
-        return location;
+    public Point2D.Double getCoordinates() {
+        return coordinates;
     }
 
-    public void setLocation(Point2D.Double location) {
-        this.location = location;
+    public void setCoordinates(Point2D.Double coordinates) {
+        this.coordinates = coordinates;
     }
 }
