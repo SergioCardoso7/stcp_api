@@ -49,4 +49,15 @@ public class BusStopController {
     public List<ArrivingBus> getIncomingBusses(@RequestParam String stopCode) throws BusStopNotFoundException, IOException {
         return busStopService.getIncomingBusses(stopCode);
     }
+
+    /**
+     * Get the bus stop by location search term.
+     * @param searchTerm the searchTerm.
+     * @return the list of bus stops near search term if any.
+     */
+
+    @GetMapping("searchstop")
+    public List<BusStopDTO> getStopsByTerm(@RequestParam String searchTerm) throws IOException {
+        return busStopService.getBusStopBySearchTerm(searchTerm);
+    }
 }

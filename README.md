@@ -551,3 +551,59 @@ http://localhost:8080/stcp_api/busstop/stoprealtimes?stopCode=1AL2
   }
 ]
 ```
+
+### Get all the bus stops by a search term
+
+#### How to:
+
+```http
+http://localhost:8080/stcp_api/busstop/searchstop?searchTerm={searchTerm}
+```
+#### Example:
+
+```http
+http://localhost:8080/stcp_api/busstop/searchstop?searchTerm=bento
+```
+#### Result:
+
+```json
+
+[
+    {
+        "code": "BJ1",
+        "name": "R.BOLAMA",
+        "zone": "R.BOLAMA",
+        "coordinates": {
+            "x": -8.60382831206588,
+            "y": 41.1654316448945
+        }
+    },
+    {
+        "code": "BJ3",
+        "name": "R.BOLAMA",
+        "zone": "R.BOLAMA",
+        "coordinates": {
+            "x": -8.60441283540329,
+            "y": 41.1655282932772
+        }
+    },
+    {
+        "code": "SBNT3",
+        "name": "R.MOUZINHO SILVEIRA",
+        "zone": "R.MOUZINHO SILVEIRA",
+        "coordinates": {
+            "x": -8.61127797831105,
+            "y": 41.1447895499713
+        }
+    },
+    {
+        "code": "1SBNT",
+        "name": "AV.D.AFONSO HENRIQUES",
+        "zone": "AV.D.AFONSO HENRIQUES",
+        "coordinates": {
+            "x": -8.61079154230201,
+            "y": 41.1448871847233
+        }
+    }
+]
+```
