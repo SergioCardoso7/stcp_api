@@ -1,11 +1,16 @@
 package com.stcp_api.domain.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.stcp_api.domain.exceptions.BusStopNotFoundException;
 import com.stcp_api.domain.model.ArrivingBus;
 import com.stcp_api.domain.model.BusStopDTO;
+import com.stcp_api.domain.model.stcpresponse.SearchBusStopModel;
+import com.stcp_api.domain.utils.StcpSearchEndpoint.StcpSearchEndpointBuilder;
+import com.stcp_api.mapper.ResponseMapper;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -82,6 +87,28 @@ public class BusStopService {
 
     }
 
+    /**
+     * This method returns the bus stop data by a search term
+     *
+     * @param searchTerm the bus stop code
+     * @return the bus stop data
+     */
+    public List<BusStopDTO> getBusStopBySearchTerm(String searchTerm) throws IOException {
+        Document doc = Jsoup.connect(prepareSearchByTermEndpoint(searchTerm)).get();
+        return filterDocStops(doc);
+    }
+
+    private List<BusStopDTO> filterDocStops(Document doc) throws JsonProcessingException {
+        String body = doc.body().text();
+        String responseJson = JsonParser.parseString(body).getAsJsonObject().toString();
+        ObjectMapper objectMapper = new ObjectMapper();
+        SearchBusStopModel responseObject = objectMapper.readValue(responseJson, SearchBusStopModel.class);
+
+        return responseObject.records().stream()
+            .map(ResponseMapper.INSTANCE::responseStopRecordToBusStop)
+            .toList();
+    }
+
     public List<ArrivingBus> getIncomingBussesInfo(Document doc) {
 
         List<ArrivingBus> arrivingBuses = new ArrayList<>();
@@ -131,5 +158,15 @@ public class BusStopService {
 
         return !jsonArray.isEmpty();
 
+    }
+
+    private String prepareSearchByTermEndpoint(String searchTerm) {
+        String basePath = "https://www.stcp.pt/pt/itinerarium/callservice.php";
+        String action = "srchlocbname";
+
+        return new StcpSearchEndpointBuilder(basePath, action)
+            .withQueryString(searchTerm)
+            .withFltBus(true)
+            .build().toString();
     }
 }
