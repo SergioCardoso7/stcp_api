@@ -56,8 +56,10 @@ public class BusStopController {
      * @return the list of bus stops near search term if any.
      */
 
+
     @GetMapping("searchstop")
     public List<BusStopDTO> getStopsByTerm(@RequestParam String searchTerm) throws IOException {
         return busStopService.getBusStopBySearchTerm(searchTerm);
     }
+
 }

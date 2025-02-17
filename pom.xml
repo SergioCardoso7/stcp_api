@@ -19,6 +19,7 @@
 		<gson.version>2.10.1</gson.version>
 		<jsoup.version>1.17.2</jsoup.version>
 		<mapstruct.version>1.5.5.Final</mapstruct.version>
+		<dotenv.version>5.2.2</dotenv.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -55,6 +56,12 @@
 			<artifactId>mapstruct</artifactId>
 			<version>${mapstruct.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>io.github.cdimascio</groupId>
+			<artifactId>java-dotenv</artifactId>
+			<version>${dotenv.version}</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
